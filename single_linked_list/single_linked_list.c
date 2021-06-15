@@ -12,10 +12,12 @@ void display(struct list*);
 void countNode(struct list*);
 void addEnd(struct list*, int);
 void addBegin(struct list **, int);
-void addAny(struct list*, int, int);
+void addAnyPos(struct list*, int, int);
 void delFirst(struct list**);
 void delLast(struct list*);
 void delAnyPos(struct list**, int);
+struct list* reverse(struct list*);
+struct list* delList(struct list*);
 
 int main()
 {
@@ -26,14 +28,19 @@ int main()
 
     addBegin(&head,30);
     addEnd(head,50);
-    addAny(head,35,2);
+    addAnyPos(head,35,2);
 
-    delLast(head);
-    delFirst(&head);
-    delAnyPos(&head,2);
-
+    delAnyPos(&head,1);
+    printf("print list: ");
     display(head);
-    countNode(head);
+
+    head = reverse(head);
+    printf("reverse list: ");
+    display(head);
+
+    head = delList(head);
+    delList(head);
+
 
     return 0;
 }
@@ -54,6 +61,7 @@ void display(struct list *head)
         printf("%d ",ptr->data);
         ptr=ptr->next;
     } 
+    printf("\n");
 }
 
 // count of node
@@ -103,7 +111,7 @@ void addBegin(struct list **head, int data)
 }
 
 // add at any position
-void addAny(struct list* head, int data, int pos)
+void addAnyPos(struct list* head, int data, int pos)
 {
     struct list *ptr, *var;
     ptr = head;
@@ -185,4 +193,36 @@ void delAnyPos(struct list** head, int pos) {
         current = NULL;
     } 
 }
+
+// delet entire list
+struct list* delList(struct list* head)
+{
+    struct list *temp = head;
+
+    while (temp!=NULL)
+    {
+        temp = temp->next;
+        free(head);
+        head = temp;
+    }
+    return head;
+}
+
+// reverse list
+struct list* reverse(struct list* head)
+{
+    struct list *prev, *curr;
+    prev = curr = NULL;
+
+    while (head != NULL)
+    {
+        curr = head->next;
+        head->next = prev;
+        prev = head;
+        head = curr;
+    }
+    head = prev;
+    return head;
+}
+
 
